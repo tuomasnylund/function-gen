@@ -30,16 +30,21 @@
 #define AD_PHASE0 (3<<14)
 #define AD_PHASE1 ((3<<14)|(1<<13))
 
+#define AD_F_MCLK 25000000
+#define AD_2POW28 268435456
+
 
 void ad9833_init(void);
 
-void ad9833_set_type(uint8_t type);
+void ad9833_set_mode(uint8_t mode);
 
 void ad9833_power(uint8_t power);
 
-void ad9833_set_frequency(uint16_t reg, uint32_t freq);
+void ad9833_set_frequency(uint16_t reg, double freq);
 
 void ad9833_set_phase(uint16_t reg, uint16_t phase);
+
+//uint32_t ad9833_calc_freq(float freq);
 
 
 #endif

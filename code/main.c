@@ -92,22 +92,22 @@ int main(void){
         fgets(sBuffer,STRBUFLEN,&USBSerialStream);
 
         if(sBuffer[0] == 'f'){
-            ad9833_set_frequency(AD_FREQ0, atol(&(sBuffer[1])));
+            ad9833_set_frequency(AD_FREQ0, atof(&(sBuffer[1])));
             fputs("frequency changed\r\n",&USBSerialStream);
         }
 
         else if(sBuffer[0] == 'l'){
-            ad9833_set_type(AD_SQUARE);
+            ad9833_set_mode(AD_SQUARE);
             fputs("square wave\r\n",&USBSerialStream);
         }
 
         else if(sBuffer[0] == 's'){
-            ad9833_set_type(AD_SINE);
+            ad9833_set_mode(AD_SINE);
             fputs("sine wave\r\n",&USBSerialStream);
         }
 
         else if(sBuffer[0] == 't'){
-            ad9833_set_type(AD_TRIANGLE);
+            ad9833_set_mode(AD_TRIANGLE);
             fputs("triangle wave\r\n",&USBSerialStream);
         }
 
