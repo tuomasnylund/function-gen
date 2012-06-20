@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date Thu 14 Jun 2012 09:57:22 PM EEST
+EESchema Schematic File Version 2  date Thu 21 Jun 2012 01:48:41 AM EEST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -37,7 +37,7 @@ $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title ""
-Date "14 jun 2012"
+Date "20 jun 2012"
 Rev ""
 Comp ""
 Comment1 ""
@@ -45,8 +45,8 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-Text Notes 7000 1450 0    60   ~ 0
-gain : 1+ (150k/20k) = 8.5\n\n0.6*8.5 = 5.1\n
+Text Notes 7000 1300 0    60   ~ 0
+gain : 1+ (10k/2k) = 6\n\n0.6*6 = 3.6\n
 Wire Wire Line
 	8000 5550 8500 5550
 Wire Wire Line

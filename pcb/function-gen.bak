@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date Thu 14 Jun 2012 11:33:13 AM EEST
+EESchema Schematic File Version 2  date Thu 14 Jun 2012 09:57:22 PM EEST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -45,6 +45,8 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+Text Notes 7000 1450 0    60   ~ 0
+gain : 1+ (150k/20k) = 8.5\n\n0.6*8.5 = 5.1\n
 Wire Wire Line
 	8000 5550 8500 5550
 Wire Wire Line
@@ -823,7 +825,7 @@ L R R8
 U 1 1 4FD4BF2D
 P 7700 1750
 F 0 "R8" V 7780 1750 50  0000 C CNN
-F 1 "R" V 7700 1750 50  0000 C CNN
+F 1 "150k" V 7700 1750 50  0000 C CNN
 	1    7700 1750
 	0    -1   -1   0   
 $EndComp
@@ -832,7 +834,7 @@ L R R7
 U 1 1 4FD4BF1F
 P 7100 1750
 F 0 "R7" V 7180 1750 50  0000 C CNN
-F 1 "R" V 7100 1750 50  0000 C CNN
+F 1 "20k" V 7100 1750 50  0000 C CNN
 	1    7100 1750
 	0    1    1    0   
 $EndComp
