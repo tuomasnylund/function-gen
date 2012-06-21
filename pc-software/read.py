@@ -5,7 +5,7 @@ import io
 from tkinter import *
 from tkinter import ttk
 
-from fgenio import FgenIO
+from fgenio import Fgen
 
 
 #class FgenInterface(Frame):
@@ -14,6 +14,25 @@ from fgenio import FgenIO
 #        self.master.title("Function Generator")
 #        self.fgenio = FgenIO()
 #        self.grid()
+
+
+class digit(Frame):
+    def __init__(self,root):
+        Frame.__init__(self)
+        self.root = root
+
+        self.var = IntVar()
+        self.var.set(0)
+
+        Button(self, command=self.up).pack()
+        self.num = ttk.Label(self,textvariable=self.var).pack()
+        Button(self,command=self.down).pack()
+
+    def up(self):
+        self.var.set('1')
+    def down(self):
+        self.var.set('2')
+
 
 
 class FgenFselect(Frame):
@@ -56,13 +75,22 @@ class FgenFselect(Frame):
 
         
         
+fgen = Fgen()
+fgen.open("/dev/ttyACM1")
 
 root = Tk()
 
-fsel1 = FgenFselect(root,"f1")
-fsel1.pack()
+root.grid()
 
-fsel2 = FgenFselect(root,"f2")
-fsel2.pack()
+digit(root).grid(column=0,row=0)
+digit(root).grid(column=1,row=0)
+digit(root).grid(column=2,row=0)
+digit(root).grid(column=3,row=0)
+
+#fsel1 = FgenFselect(root,"f1")
+#fsel1.pack()
+
+#fsel2 = FgenFselect(root,"f2")
+#fsel2.pack()
 
 root.mainloop()

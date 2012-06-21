@@ -4,11 +4,11 @@ import serial
 import io
 
 
-class FgenIO():
+class Fgen():
     def __init__(self):
         self.serial = serial.Serial()
 
-    def openIO(self,devname):
+    def open(self,devname):
         self.devname = devname
         self.serial.port = devname
         self.serial.baudrate = 57600
@@ -17,10 +17,17 @@ class FgenIO():
 
         try:
             self.serial.open()
-            print("Connected to " + fgen.portstr)
+            print("Connected to " + self.serial.portstr)
         except:
             print("Device not found")
 
-    def closeIO(self):
+    def close(self):
         self.serial.close()
 
+    def setFreq(self, freq):
+        self.serial.write("f".encode('utf-8'))
+        self.serial.write(str(freq).encode('utf-8'))
+        self.serial.write("\r\n".encode('utf-8'))
+
+    def on(self):
+        sef.serial.write("P\r\n".encode('utf-8'))
