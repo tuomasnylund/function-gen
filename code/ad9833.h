@@ -32,6 +32,7 @@
 
 #define AD_F_MCLK 25000000
 #define AD_2POW28 268435456
+#define AD_FREQ_CALC(freq) (uint32_t)(((double)AD_2POW28/(double)AD_F_MCLK*freq)*4)
 
 
 void ad9833_init(void);

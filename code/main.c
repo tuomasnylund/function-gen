@@ -150,13 +150,14 @@ void initialize(void){
     /* Init SPI */
     spi_init(SPIMODE2);
 
+    /* Init AD9833 */
+    ad9833_init();
+
     /** LUFA USB related inits */
 	USB_Init();
 	CDC_Device_CreateBlockingStream
         (&VirtualSerial_CDC_Interface, &USBSerialStream);
 
-    /* Init AD9833 */
-    ad9833_init();
 
     /** enable interrupts*/
     sei();
