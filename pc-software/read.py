@@ -16,23 +16,39 @@ from fgenio import Fgen
 #        self.grid()
 
 
-class digit(Frame):
-    def __init__(self,root):
+class Segment(Frame):
+    def __init__(self,root,exp):
         Frame.__init__(self)
         self.root = root
+
+        self.exp = exp
 
         self.var = IntVar()
         self.var.set(0)
 
-        Button(self, command=self.up).pack()
+        #Button(self, command= lambda: root.change(self.exp,+1)).pack()
+        Button(self).pack()
         self.num = ttk.Label(self,textvariable=self.var).pack()
-        Button(self,command=self.down).pack()
+        Button(self).pack()
+        #Button(self, command= lambda: root.change(self.exp,-1)).pack()
 
-    def up(self):
-        self.var.set('1')
-    def down(self):
-        self.var.set('2')
+    def set(val):
+        self.var = val
 
+class Digits(Frame):
+    def __init__(self,root):
+        Frame.__init__(self)
+        self.root = root
+
+        self.grid()
+
+        Segment(self,0).grid(column=0,row=0)
+        #Segment(self,0).grid(column=1,row=0)
+        #Segment(self,0).grid(column=2,row=0)
+        #Segment(self,0).grid(column=3,row=0)
+
+    #def change(self,exp,val):
+    #    print ("omg")
 
 
 class FgenFselect(Frame):
@@ -75,17 +91,17 @@ class FgenFselect(Frame):
 
         
         
-fgen = Fgen()
-fgen.open("/dev/ttyACM1")
+#fgen = Fgen()
+#fgen.open("/dev/ttyACM1")
 
 root = Tk()
 
-root.grid()
+digits = Digits(root)
+digits.pack()
 
-digit(root).grid(column=0,row=0)
-digit(root).grid(column=1,row=0)
-digit(root).grid(column=2,row=0)
-digit(root).grid(column=3,row=0)
+root.mainloop()
+
+
 
 #fsel1 = FgenFselect(root,"f1")
 #fsel1.pack()
@@ -93,4 +109,3 @@ digit(root).grid(column=3,row=0)
 #fsel2 = FgenFselect(root,"f2")
 #fsel2.pack()
 
-root.mainloop()
