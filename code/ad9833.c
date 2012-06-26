@@ -6,7 +6,11 @@
 
 uint16_t ad_cmd_reg;
 uint8_t  ad_mode;
-float    ad_freq;
+float    ad_freq[2];
+uint8_t  ad_freq_out;
+
+uint16_t ad_phase[2];
+uint8_t  ad_phase_out;
 
 static inline void ad9833_send(uint16_t packet){
     spi_send_byte((uint8_t)(packet>>8));
@@ -90,26 +94,83 @@ void ad9833_set_mode(uint8_t mode){
 }
 
 void ad9833_set_phase(uint16_t reg, uint16_t phase){
+    uint16_t reg_reg; //probably should be renamed...
+    if (reg==1)
+        reg_reg = AD_PHASE1;
+    else
+        reg_reg = AD_PHASE0;
+
+    ad_phase[reg] = phase;
+
     AD_FSYNC_LO();
     _delay_us(5);
-    ad9833_send(reg | phase);
+    ad9833_send(reg_reg | phase);
     _delay_us(5);
     AD_FSYNC_HI();
 }
 
+double ad9833_get_phase(uint8_t reg){
+    return ad_phase[reg];
+}
 
-void ad9833_set_frequency(uint16_t reg, double freq){
+void    ad9833_set_freq_out(uint8_t freq_out){
+    ad_freq_out = freq_out;
+    switch (freq_out){
+        case 0:
+            ad_cmd_reg &= ~(1<<AD_FSELECT);
+            break;
+        case 1:
+            ad_cmd_reg |= (1<<AD_FSELECT);
+            break;
+        case 2:
+            //TODO
+            break;
+    }
+}
+
+uint8_t ad9833_get_freq_out(void){
+    return ad_freq_out;
+}
+
+void    ad9833_set_phase_out(uint8_t phase_out){
+    ad_phase_out = phase_out;
+    switch (phase_out){
+        case 0:
+            ad_cmd_reg &= ~(1<<AD_PSELECT);
+            break;
+        case 1:
+            ad_cmd_reg |= (1<<AD_PSELECT);
+            break;
+        case 2:
+            //TODO
+            break;
+    }
+}
+
+uint8_t ad9833_get_phase_out(void){
+    return ad_phase_out;
+}
+
+void ad9833_set_frequency(uint8_t reg, double freq){
     uint32_t freq_reg;
+    uint16_t reg_reg; //probably should be renamed...
+    freq_reg = AD_FREQ_CALC(freq);
+    ad_freq[reg] = freq;
 
-    ad_freq = freq;
-
-    freq_reg = AD_FREQ_CALC(ad_freq);
+    if (reg==1)
+        reg_reg = AD_FREQ1;
+    else
+        reg_reg = AD_FREQ0;
 
     AD_FSYNC_LO();
     _delay_us(5);
     ad9833_send((1<<AD_B28) | ad_cmd_reg);
-    ad9833_send(reg | (0x3FFF&(uint16_t)(freq_reg>>2 )));
-    ad9833_send(reg | (0x3FFF&(uint16_t)(freq_reg>>16)));
+    ad9833_send(reg_reg | (0x3FFF&(uint16_t)(freq_reg>>2 )));
+    ad9833_send(reg_reg | (0x3FFF&(uint16_t)(freq_reg>>16)));
     _delay_us(5);
     AD_FSYNC_HI();
+}
+
+double ad9833_get_frequency(uint8_t reg){
+    return ad_freq[reg];
 }
