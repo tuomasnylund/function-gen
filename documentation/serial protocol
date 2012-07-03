@@ -6,7 +6,7 @@ sp2 [phase]
 sfo [1/2/m(modulation)]                      #frequency output
 spo [1/2/m(modulation)]                      #phase output
 so [o(off)/s(sine)/t(triangle)/q(square)]    #output mode
-smf [freq]                                   #modulation freq
+sm [freq]                                    #modulation freq
 
 gets:
 gsf1 (returns frequency 1)
@@ -15,3 +15,28 @@ gp1  (returns phase 1)
 gp2
 
 etc...
+
+
+s
+--f
+----1
+----2
+----o
+--p
+----1
+----2
+----o
+--o
+--m
+
+g
+--f
+----1
+----2
+----o
+--p
+----1
+----2
+----o
+--o
+--m

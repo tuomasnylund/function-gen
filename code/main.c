@@ -98,7 +98,6 @@ int main(void){
                     switch (sBuffer[2]){
                         case '1':
                             ad9833_set_frequency(0, atof(&(sBuffer[4])));
-                            fprintf(&USBSerialStream,"set freq\r\n");
                             break;
                         case '2':
                             ad9833_set_frequency(1, atof(&(sBuffer[4])));
@@ -106,7 +105,6 @@ int main(void){
                         case 'o':
                             switch (sBuffer[4]){
                                 case '1':
-                                    fprintf(&USBSerialStream,"set freq out\r\n");
                                     ad9833_set_freq_out(0);
                                     break;
                                 case '2':
@@ -120,11 +118,27 @@ int main(void){
                     }
                     break;
                 case 'p': //< phase related
-                    if (sBuffer[2] == '0')
-                        tmp = 0;
-                    else
-                        tmp = 1;
-                    ad9833_set_phase(tmp, atoi(&(sBuffer[4])));
+                    switch (sBuffer[2]){
+                        case '1':
+                            ad9833_set_phase(0, atoi(&(sBuffer[4])));
+                            break;
+                        case '2':
+                            ad9833_set_phase(1, atof(&(sBuffer[4])));
+                            break;
+                        case 'o':
+                            switch (sBuffer[4]){
+                                case '1':
+                                    ad9833_set_phase_out(0);
+                                    break;
+                                case '2':
+                                    ad9833_set_phase_out(1);
+                                    break;
+                                case 'm':
+                                    ad9833_set_phase_out(2);
+                                    break;
+                            }
+                            break;
+                    }
                     break;
                 case 'o': //<set output mode
                     switch (sBuffer[3]){
