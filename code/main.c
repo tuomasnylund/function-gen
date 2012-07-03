@@ -81,6 +81,7 @@ int main(void){
     //variables
     //uint8_t i;
     char sBuffer[STRBUFLEN]; //!< character buffer for usb serial
+    uint8_t tmp;
 
     //initialize
     initialize();
@@ -91,34 +92,59 @@ int main(void){
         /** Get input */
         fgets(sBuffer,STRBUFLEN,&USBSerialStream);
 
-        if(sBuffer[0] == 'f'){
-            ad9833_set_frequency(AD_FREQ0, atof(&(sBuffer[1])));
-            fputs("frequency changed\r\n",&USBSerialStream);
+        if (sBuffer[0] == 's'){ //< Command is a set command
+            switch (sBuffer[1]){
+                case 'f':       //< frequency related
+                    switch (sBuffer[2]){
+                        case '1':
+                            ad9833_set_frequency(0, atof(&(sBuffer[4])));
+                            fprintf(&USBSerialStream,"set freq\r\n");
+                            break;
+                        case '2':
+                            ad9833_set_frequency(1, atof(&(sBuffer[4])));
+                            break;
+                        case 'o':
+                            switch (sBuffer[4]){
+                                case '1':
+                                    fprintf(&USBSerialStream,"set freq out\r\n");
+                                    ad9833_set_freq_out(0);
+                                    break;
+                                case '2':
+                                    ad9833_set_freq_out(1);
+                                    break;
+                                case 'm':
+                                    ad9833_set_freq_out(2);
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
+                case 'p': //< phase related
+                    if (sBuffer[2] == '0')
+                        tmp = 0;
+                    else
+                        tmp = 1;
+                    ad9833_set_phase(tmp, atoi(&(sBuffer[4])));
+                    break;
+                case 'o': //<set output mode
+                    switch (sBuffer[3]){
+                        case 'o':
+                            ad9833_set_mode(AD_OFF);
+                            break;
+                        case 's':
+                            ad9833_set_mode(AD_SINE);
+                            break;
+                        case 't':
+                            ad9833_set_mode(AD_TRIANGLE);
+                            break;
+                        case 'q':
+                            ad9833_set_mode(AD_SQUARE);
+                            break;
+                    }
+                    break;
+            }
         }
-
-        else if(sBuffer[0] == 'l'){
-            ad9833_set_mode(AD_SQUARE);
-            fputs("square wave\r\n",&USBSerialStream);
-        }
-
-        else if(sBuffer[0] == 's'){
-            ad9833_set_mode(AD_SINE);
-            fputs("sine wave\r\n",&USBSerialStream);
-        }
-
-        else if(sBuffer[0] == 't'){
-            ad9833_set_mode(AD_TRIANGLE);
-            fputs("triangle wave\r\n",&USBSerialStream);
-        }
-
-        else if(sBuffer[0] == 'p'){
-            ad9833_power(0);
-            fputs("powered off\r\n",&USBSerialStream);
-        }
-
-        else if(sBuffer[0] == 'P'){
-            ad9833_power(1);
-            fputs("powered on\r\n",&USBSerialStream);
+        else if (sBuffer[0] == 'g'){
         }
         
         /**LUFA usb related tasks*/

@@ -8,10 +8,10 @@
 #define AD_FSYNC_HI() AD_FSYNC_PORT |=  (1<<AD_FSYNC_BIT)
 #define AD_FSYNC_LO() AD_FSYNC_PORT &= ~(1<<AD_FSYNC_BIT)
 
-#define AD_TRIANGLE 0
-#define AD_SQUARE   1
-#define AD_SINE     2
-
+#define AD_OFF      0
+#define AD_TRIANGLE 1
+#define AD_SQUARE   2
+#define AD_SINE     3
 
 #define AD_B28     13
 #define AD_HLB     12

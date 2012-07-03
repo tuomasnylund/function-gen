@@ -6,6 +6,7 @@
 
 uint16_t ad_cmd_reg;
 uint8_t  ad_mode;
+
 float    ad_freq[2];
 uint8_t  ad_freq_out;
 
@@ -18,36 +19,29 @@ static inline void ad9833_send(uint16_t packet){
 }
 
 void ad9833_init(void){
+    //init FSYNC pin (aka Chip select)
     ad_cmd_reg |= (1<<AD_B28);
     AD_FSYNC_DDR |= (1<<AD_FSYNC_BIT);
-
     AD_FSYNC_HI();
 
     _delay_us(10);
 
     AD_FSYNC_LO();
     _delay_us(5);
-    //ad9833_send((1<<AD_B28)|(1<<AD_RESET));
     ad9833_send((1<<AD_SLEEP12)|(1<<AD_RESET));
     ad_cmd_reg |= (1<<AD_SLEEP12);
     _delay_us(5);
     AD_FSYNC_HI();
 
-    _delay_us(10);
-    ad9833_set_frequency(AD_FREQ0, 0);
-    _delay_us(10);
-    ad9833_set_frequency(AD_FREQ1, 0);
-    _delay_us(10);
-    ad9833_set_phase(AD_PHASE0, 0);
-    _delay_us(10);
-    ad9833_set_phase(AD_PHASE1, 0);
-    _delay_us(10);
+    ad9833_set_frequency(0, 0);
+    ad9833_set_frequency(1, 0);
+    ad9833_set_phase(0, 0);
+    ad9833_set_phase(1, 0);
 
-    AD_FSYNC_LO();
-    _delay_us(5);
+    ad9833_set_freq_out(0);
+    ad9833_set_phase_out(0);
+
     ad9833_power(0);
-    _delay_us(5);
-    AD_FSYNC_HI();
 }
 
 void ad9833_power(uint8_t power){
@@ -56,8 +50,6 @@ void ad9833_power(uint8_t power){
         ad_cmd_reg &= ~(1<<AD_SLEEP1);
     }
     else{
-        AD_FSYNC_LO();
-        _delay_us(5);
         ad_cmd_reg |= (1<<AD_SLEEP12);
         ad_cmd_reg |= (1<<AD_SLEEP1);
     }
@@ -71,18 +63,28 @@ void ad9833_power(uint8_t power){
 void ad9833_set_mode(uint8_t mode){
     ad_mode = mode;
     switch (mode){
+        case AD_OFF:
+            ad_cmd_reg |= (1<<AD_SLEEP12);
+            ad_cmd_reg |= (1<<AD_SLEEP1);
+            break;
         case AD_TRIANGLE:
             ad_cmd_reg &= ~(1<<AD_OPBITEN);
             ad_cmd_reg |=  (1<<AD_MODE);
+            ad_cmd_reg &= ~(1<<AD_SLEEP12);
+            ad_cmd_reg &= ~(1<<AD_SLEEP1);
             break;
         case AD_SQUARE:
             ad_cmd_reg |=  (1<<AD_OPBITEN);
             ad_cmd_reg &= ~(1<<AD_MODE);
             ad_cmd_reg |=  (1<<AD_DIV2);
+            ad_cmd_reg &= ~(1<<AD_SLEEP12);
+            ad_cmd_reg &= ~(1<<AD_SLEEP1);
             break;
         case AD_SINE:
             ad_cmd_reg &= ~(1<<AD_OPBITEN);
             ad_cmd_reg &= ~(1<<AD_MODE);
+            ad_cmd_reg &= ~(1<<AD_SLEEP12);
+            ad_cmd_reg &= ~(1<<AD_SLEEP1);
             break;
     }
 
@@ -93,7 +95,7 @@ void ad9833_set_mode(uint8_t mode){
     AD_FSYNC_HI();
 }
 
-void ad9833_set_phase(uint16_t reg, uint16_t phase){
+void ad9833_set_phase(uint8_t reg, uint16_t phase){
     uint16_t reg_reg; //probably should be renamed...
     if (reg==1)
         reg_reg = AD_PHASE1;
@@ -109,7 +111,7 @@ void ad9833_set_phase(uint16_t reg, uint16_t phase){
     AD_FSYNC_HI();
 }
 
-double ad9833_get_phase(uint8_t reg){
+uint16_t ad9833_get_phase(uint8_t reg){
     return ad_phase[reg];
 }
 
@@ -126,6 +128,12 @@ void    ad9833_set_freq_out(uint8_t freq_out){
             //TODO
             break;
     }
+
+    AD_FSYNC_LO();
+    _delay_us(5);
+    ad9833_send(ad_cmd_reg);
+    _delay_us(5);
+    AD_FSYNC_HI();
 }
 
 uint8_t ad9833_get_freq_out(void){
@@ -145,6 +153,12 @@ void    ad9833_set_phase_out(uint8_t phase_out){
             //TODO
             break;
     }
+
+    AD_FSYNC_LO();
+    _delay_us(5);
+    ad9833_send(ad_cmd_reg);
+    _delay_us(5);
+    AD_FSYNC_HI();
 }
 
 uint8_t ad9833_get_phase_out(void){
