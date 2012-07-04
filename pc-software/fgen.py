@@ -26,11 +26,13 @@ from fgenio import FgenIO
 
 
 class FgenFselect(Frame):
-    EXPMIN = -2
-    EXPNUM = 9
-    def __init__(self,root,callback):
+    #EXPMIN = -2
+    #EXPNUM = 9
+    def __init__(self,root,callback,expmin,expnum):
         Frame.__init__(self,bg="black")
         self.root = root
+        self.expmin = expmin
+        self.expnum = expnum
 
         self.callback = callback
 
@@ -45,20 +47,20 @@ class FgenFselect(Frame):
         self.imagedown = PhotoImage(file="icons/arrow_down.gif")
 
         #for i in range(0,10):
-        while len(self.var)<self.EXPNUM:
+        while len(self.var)<self.expnum:
             self.var.append(IntVar())
-            if not (self.EXPNUM+1+self.EXPMIN - len(self.var)) % 3:
+            if not (self.expnum+1+self.expmin - len(self.var)) % 3:
                 if len(self.var) > 1:
-                    if self.EXPNUM+self.EXPMIN+1 == len(self.var):
+                    if self.expnum+self.expmin+1 == len(self.var):
                         Label(self,text='.',bg="black",fg="red").grid(column=len(self.var)+offset,row=1)
                     else:
                         Label(self,text=',',bg="black",fg="red").grid(column=len(self.var)+offset,row=1)
                     offset += 1
 
             #this has to be the most horrible looking code I've done in ages
-            Button(self, image=self.imageup, relief="flat",highlightbackground="black",bd=0,width=12,height=12,bg="black", command= lambda pos=self.EXPNUM+self.EXPMIN-len(self.var): self.btnCallback(pos,1)).grid(column=len(self.var)+offset,row=0)
+            Button(self, image=self.imageup, relief="flat",highlightbackground="black",bd=0,width=12,height=12,bg="black", command= lambda pos=self.expnum+self.expmin-len(self.var): self.btnCallback(pos,1)).grid(column=len(self.var)+offset,row=0)
             Label(self,textvariable=self.var[len(self.var)-1],bg="black",fg="white").grid(column=len(self.var)+offset,row=1)
-            Button(self, image=self.imagedown, relief="flat",highlightbackground="black",bd=0,width=12,height=12,bg="black", command= lambda pos=self.EXPNUM+self.EXPMIN-len(self.var): self.btnCallback(pos,-1)).grid(column=len(self.var)+offset,row=2)
+            Button(self, image=self.imagedown, relief="flat",highlightbackground="black",bd=0,width=12,height=12,bg="black", command= lambda pos=self.expnum+self.expmin-len(self.var): self.btnCallback(pos,-1)).grid(column=len(self.var)+offset,row=2)
 
         Label(self,text='Hz',bg="black",fg="white").grid(column=len(self.var)+offset+1,row=1)
 
@@ -74,8 +76,8 @@ class FgenFselect(Frame):
 
     def setDigits(self):
         valstr = str(self.value)
-        for i in range (0,self.EXPNUM):
-            self.var[i].set(int(self.value/math.pow(10,self.EXPNUM+self.EXPMIN-1-i)%10))
+        for i in range (0,self.expnum):
+            self.var[i].set(int(self.value/math.pow(10,self.expnum+self.expmin-1-i)%10))
 
 
 
@@ -95,6 +97,21 @@ class FgenPselect(Frame):
         self.callback(self.var.get())
 
 
+class FgenMFselect(Frame):
+    def __init__(self,root,callback):
+        Frame.__init__(self)
+        self.root = root
+        self.callback = callback
+
+        self.columnconfigure(1,weight=1)
+
+        self.var = DoubleVar()
+        self.var.set(2)
+        Label(self, textvariable=self.var,width=5).grid(column=0,row=0,sticky=W)
+        Scale(self, variable=self.var, command=self.scaleCallback, from_=2, to=120000,orient=HORIZONTAL,length=120,showvalue=0).grid(column=2,row=0,sticky=E)
+
+    def scaleCallback(self,event):
+        self.callback(self.var.get())
 
 
 
@@ -170,10 +187,10 @@ root.grid()
 root.columnconfigure(1,weight=1)
 
 Label(root,text="Frequency 1:").grid(column=0,row=0)
-fsel1 = FgenFselect(root,lambda val:fgen.setFreq(1,val)).grid(column=0,row=1,padx=5)
+fsel1 = FgenFselect(root,lambda val:fgen.setFreq(1,val),-2,9).grid(column=0,row=1,padx=5)
 
 Label(root,text="Frequency 2:").grid(column=2,row=0)
-fsel2 = FgenFselect(root,lambda val:fgen.setFreq(2,val)).grid(column=2,row=1,padx=5)
+fsel2 = FgenFselect(root,lambda val:fgen.setFreq(2,val),-2,9).grid(column=2,row=1,padx=5)
 
 Label(root,text="Phase 1:").grid(column=0,row=2)
 psel1 = FgenPselect(root,lambda val:fgen.setPhase(1,val)).grid(column=0,row=3,sticky=W+E)
@@ -184,5 +201,9 @@ psel2 = FgenPselect(root,lambda val:fgen.setPhase(2,val)).grid(column=2,row=3,st
 msel = FgenMode (root,fgen.setMode    ).grid(column=0,columnspan=3,row=5,sticky=E+W)
 fsel = FgenFMode(root,fgen.setFreqOut ).grid(column=0,columnspan=3,row=7,sticky=E+W)
 psel = FgenPMode(root,fgen.setPhaseOut).grid(column=0,columnspan=3,row=9,sticky=E+W)
+
+Label(root,text="Modulation Frequency").grid(column=0,row=10)
+mfsel = FgenFselect(root,fgen.setModFreq,0,6).grid(column=0,row=11,padx=5)
+#mfsel = FgenMFselect(root,fgen.setModFreq).grid(column=0,row=11,sticky=W+E)
 
 root.mainloop()

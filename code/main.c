@@ -175,7 +175,7 @@ int main(void){
                     }
                     break;
                 case 'm': //<set modulation freq
-                    ad9833_set_mod_freq(atof(&(sBuffer[3])));
+                    ad9833_set_mod_freq(atoi(&(sBuffer[3])));
             }
         }
         else if (sBuffer[0] == 'g'){

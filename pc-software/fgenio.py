@@ -69,6 +69,16 @@ class FgenIO():
         self.serial.write(str(freq).encode('utf-8'))
         self.serial.write("\r\n".encode('utf-8'))
 
+    def setModFreq(self, freq):
+        if freq < 2:
+            freq = 2
+        elif freq > 120000:
+            freq = 120000
+
+        self.serial.write("sm "  .encode('utf8'))
+        self.serial.write(str(freq).encode('utf8'))
+        self.serial.write("\r\n"  .encode('utf8'))
+
     def setMode(self,mode):
         commands = {
                 "Off"     :"so o\r\n".encode('utf-8'),
