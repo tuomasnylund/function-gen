@@ -26,8 +26,6 @@ from fgenio import FgenIO
 
 
 class FgenFselect(Frame):
-    #EXPMIN = -2
-    #EXPNUM = 9
     def __init__(self,root,callback,expmin,expnum):
         Frame.__init__(self,bg="black")
         self.root = root
@@ -95,25 +93,6 @@ class FgenPselect(Frame):
 
     def scaleCallback(self,event):
         self.callback(self.var.get())
-
-
-class FgenMFselect(Frame):
-    def __init__(self,root,callback):
-        Frame.__init__(self)
-        self.root = root
-        self.callback = callback
-
-        self.columnconfigure(1,weight=1)
-
-        self.var = DoubleVar()
-        self.var.set(2)
-        Label(self, textvariable=self.var,width=5).grid(column=0,row=0,sticky=W)
-        Scale(self, variable=self.var, command=self.scaleCallback, from_=2, to=120000,orient=HORIZONTAL,length=120,showvalue=0).grid(column=2,row=0,sticky=E)
-
-    def scaleCallback(self,event):
-        self.callback(self.var.get())
-
-
 
 class FgenMode(Frame):
     def __init__(self,root,callback):
