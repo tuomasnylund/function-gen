@@ -86,10 +86,10 @@ ServiceBinary=%12%\%DRIVERFILENAME%.sys
 [SourceDisksFiles]
 [SourceDisksNames]
 [DeviceList]
-%DESCRIPTION%=DriverInstall, USB\VID_03EB&PID_2044
+%DESCRIPTION%=DriverInstall, USB\VID_1313&PID_0020
 
 [DeviceList.NTamd64]
-%DESCRIPTION%=DriverInstall, USB\VID_03EB&PID_2044
+%DESCRIPTION%=DriverInstall, USB\VID_1313&PID_0020
 
 
 ;------------------------------------------------------------------------------
@@ -100,7 +100,7 @@ ServiceBinary=%12%\%DRIVERFILENAME%.sys
 [Strings]
 MFGFILENAME="CDC_vista"
 DRIVERFILENAME ="usbser"
-MFGNAME="http://www.lufa-lib.org"
+MFGNAME="http://tuomasnylund.fi"
 INSTDISK="LUFA CDC Driver Installer"
-DESCRIPTION="Communications Port"
-SERVICE="USB RS-232 Emulation Driver"
+DESCRIPTION="Function Generator"
+SERVICE="Function Generator"

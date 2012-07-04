@@ -4,6 +4,9 @@
 
   dean [at] fourwalledcubicle [dot] com
            www.lufa-lib.org
+
+ descriptor file modified by Tuomas Nylund
+       tuomas.nylund@gmail.com
 */
 
 /*
@@ -66,7 +69,7 @@ const USB_Descriptor_Device_t PROGMEM DeviceDescriptor =
 	.Endpoint0Size          = FIXED_CONTROL_ENDPOINT_SIZE,
 
 	.VendorID               = 0x1313,
-	.ProductID              = 0x0001,
+	.ProductID              = 0x0020,
 	.ReleaseNumber          = VERSION_BCD(00.01),
 
 	.ManufacturerStrIndex   = 0x01,
@@ -214,9 +217,9 @@ const USB_Descriptor_String_t PROGMEM ManufacturerString =
  */
 const USB_Descriptor_String_t PROGMEM ProductString =
 {
-	.Header                 = {.Size = USB_STRING_LEN(19), .Type = DTYPE_String},
+	.Header                 = {.Size = USB_STRING_LEN(18), .Type = DTYPE_String},
 
-	.UnicodeString          = L"Test Virtual Serial"
+	.UnicodeString          = L"Function Generator"
 };
 
 /** This function is called by the library when in device mode, and must be overridden (see library "USB Descriptors"
