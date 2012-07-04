@@ -100,7 +100,6 @@ int main(void){
     //variables
     //uint8_t i;
     char sBuffer[STRBUFLEN]; //!< character buffer for usb serial
-    uint8_t tmp;
 
     //initialize
     initialize();

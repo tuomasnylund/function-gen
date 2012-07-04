@@ -53,18 +53,28 @@
 #define AD_2POW28 268435456
 #define AD_FREQ_CALC(freq) (uint32_t)(((double)AD_2POW28/(double)AD_F_MCLK*freq)*4)
 
+
+
+typedef struct {
+    float    freq[2];
+    float    phase[2];
+    uint8_t  freq_out;
+    uint8_t  phase_out;
+    uint8_t  mode;
+    uint16_t command_reg;
+} ad9833_settings_t;
+
 //some functions could be done more efficiently, maybe as inline functions...
 
 void ad9833_init(void);
 
 void ad9833_set_mode(uint8_t mode);
-void ad9833_power(uint8_t power);
 
-void   ad9833_set_frequency(uint8_t reg, double freq);
-double ad9833_get_frequency(uint8_t reg);
+void    ad9833_set_frequency(uint8_t reg, double freq);
+double  ad9833_get_frequency(uint8_t reg);
 
-void     ad9833_set_phase(uint8_t reg, uint16_t phase);
-uint16_t ad9833_get_phase(uint8_t reg);
+void    ad9833_set_phase(uint8_t reg, double phase);
+double  ad9833_get_phase(uint8_t reg);
 
 void    ad9833_set_freq_out(uint8_t freq_out);
 uint8_t ad9833_get_freq_out(void);
