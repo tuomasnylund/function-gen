@@ -1,0 +1,43 @@
+USB-controlled function generator
+by: Tuomas Nylund
+http://tuomasnylund.fi
+
+
+Description:
+This repo contains all the code and PCB designs related
+to my USB-controlled function generator
+
+It relies on an USB-enabled Atmel AVR at90usb162 microcontroller
+and a DDS chip called ad9833. Together with some other components
+the board can produce Sine, triangle and square wave output
+from ~0.01Hz to ~3MHz. 
+
+A simple GUI in the form of a python app allows for simple control 
+of the hardware.
+
+The current design doesn't allow for changing amplitude, offset,
+coupling etc. That is planned to be implemented on a separate
+board at a later date.
+
+
+TODO:
+* AVR: Simple FSK and PSK
+* AVR: Implement commands to get current settings of the function generator
+* PC:  Implement fetching current settings on startup of pc interface
+
+
+credits:
+
+USB support for AVR provided by LUFA library by Dean Camera:
+www.fourwalledcubicle.com/LUFA.php
+
+
+folders:
+code - contains code for the AVR
+pcb - PCB designs for the function generator
+pc-software - python app to control the function generator
+documentation - some random files about the project
+
+licenses:
+all of my code released under GPLv3
+The LUFA library is released under MIT license by Dean Camera
