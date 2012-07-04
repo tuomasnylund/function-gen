@@ -24,18 +24,40 @@ class FgenIO():
     def close(self):
         self.serial.close()
 
-    def setFreq(self, freq):
-        #print ("set freq to ","{0:.2f}".format(freq))
-        self.serial.write("f".encode('utf-8'))
+    def setPhase(self, reg, phase):
+        if reg == 1:
+            self.serial.write("sp1 ".encode('utf=8'))
+        else:
+            self.serial.write("sp2 ".encode('utf=8'))
+
+        self.serial.write(str(phase).encode('utf-8'))
+        self.serial.write("\r\n".encode('utf-8'))
+
+    def setPhaseOut(self, reg):
+        self.serial.write("spo "  .encode('utf8'))
+        self.serial.write(str(reg).encode('utf8'))
+        self.serial.write("\r\n"  .encode('utf8'))
+
+    def setFreqOut(self, reg):
+        self.serial.write("sfo "  .encode('utf8'))
+        self.serial.write(str(reg).encode('utf8'))
+        self.serial.write("\r\n"  .encode('utf8'))
+
+    def setFreq(self, reg, freq):
+        if reg == 1:
+            self.serial.write("sf1 ".encode('utf=8'))
+        else:
+            self.serial.write("sf2 ".encode('utf=8'))
+
         self.serial.write(str(freq).encode('utf-8'))
         self.serial.write("\r\n".encode('utf-8'))
 
     def setMode(self,mode):
         commands = {
-                "Off"     :"p\r\n".encode('utf-8'),
-                "Sine"    :"P\r\ns\r\n".encode('utf-8'),
-                "Triangle":"P\r\nt\r\n".encode('utf-8'),
-                "Square"  :"P\r\nl\r\n".encode('utf-8')
+                "Off"     :"so o\r\n".encode('utf-8'),
+                "Sine"    :"so s\r\n".encode('utf-8'),
+                "Triangle":"so t\r\n".encode('utf-8'),
+                "Square"  :"so q\r\n".encode('utf-8')
                 }
         self.serial.write(commands[mode])
 

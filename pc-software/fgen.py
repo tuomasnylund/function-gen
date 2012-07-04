@@ -63,15 +63,20 @@ class FgenFselect(Frame):
 
 
 class FgenPselect(Frame):
-    def __init__(self,root):
+    def __init__(self,root,callback):
         Frame.__init__(self)
         self.root = root
+        self.callback = callback
 
         self.columnconfigure(1,weight=1)
 
         self.var = DoubleVar()
         Label(self, textvariable=self.var,width=5).grid(column=0,row=0,sticky=W)
-        Scale(self, variable=self.var, from_=0, to=360,orient=HORIZONTAL,length=120,showvalue=0).grid(column=2,row=0,sticky=E)
+        Scale(self, variable=self.var, command=self.scaleCallback, from_=0, to=360,orient=HORIZONTAL,length=120,showvalue=0).grid(column=2,row=0,sticky=E)
+
+    def scaleCallback(self,event):
+        self.callback(self.var.get())
+
 
 
 
@@ -86,10 +91,10 @@ class FgenMode(Frame):
 
         Label(self,text="Mode:").grid(sticky=W,column=0,row=0)
         self.columnconfigure(1,weight=1)
-        Radiobutton(self,command=self.btnCallback,text="Off",variable=self.var,value="Off").grid(column=2,row=0)
-        Radiobutton(self,command=self.btnCallback,text="Sine",variable=self.var,value="Sine").grid(column=3,row=0)
+        Radiobutton(self,command=self.btnCallback,text="Off"     ,variable=self.var,value="Off"     ).grid(column=2,row=0)
+        Radiobutton(self,command=self.btnCallback,text="Sine"    ,variable=self.var,value="Sine"    ).grid(column=3,row=0)
         Radiobutton(self,command=self.btnCallback,text="Triangle",variable=self.var,value="Triangle").grid(column=4,row=0)
-        Radiobutton(self,command=self.btnCallback,text="Square",variable=self.var,value="Square").grid(column=5,row=0)
+        Radiobutton(self,command=self.btnCallback,text="Square"  ,variable=self.var,value="Square"  ).grid(column=5,row=0)
 
     def btnCallback(self):
         print (self.var.get())
@@ -100,36 +105,43 @@ class FgenMode(Frame):
 
 
 class FgenFMode(Frame):
-    def __init__(self,root):
+    def __init__(self,root,callback):
         Frame.__init__(self)
         self.root = root
-
+        self.callback = callback
         self.var = StringVar()
-        self.var.set("Freq1")
+        self.var.set("1")
 
         Label(self,text="Frequency:").grid(sticky=W,column=0,row=0)
         self.columnconfigure(1,weight=1)
-        Radiobutton(self,text="Freq1",variable=self.var,value="Freq1").grid(column=2,row=0)
-        Radiobutton(self,text="Freq2",variable=self.var,value="Freq2").grid(column=3,row=0)
-        Radiobutton(self,text="FSK",variable=self.var,value="FSK").grid(column=4,row=0)
+        Radiobutton(self,command=self.btnCallback,text="Freq1",variable=self.var,value="1").grid(column=2,row=0)
+        Radiobutton(self,command=self.btnCallback,text="Freq2",variable=self.var,value="2").grid(column=3,row=0)
+        Radiobutton(self,command=self.btnCallback,text="FSK"  ,variable=self.var,value="m").grid(column=4,row=0)
 
-
-
+    def btnCallback(self):
+        self.callback(self.var.get())
+        
         
 class FgenPMode(Frame):
-    def __init__(self,root):
+    def __init__(self,root,callback):
         Frame.__init__(self)
         self.root = root
-
+        self.callback = callback
         self.var = StringVar()
         self.var.set("Phase1")
 
         Label(self,text="Phase:").grid(sticky=W,column=0,row=0)
         self.columnconfigure(1,weight=1)
-        Radiobutton(self,text="Phase1",variable=self.var,value="Phase1").grid(column=2,row=0)
-        Radiobutton(self,text="Phase2",variable=self.var,value="Phase2").grid(column=3,row=0)
-        Radiobutton(self,text="PSK",variable=self.var,value="PSK").grid(column=4,row=0)
+        Radiobutton(self,command=self.btnCallback,text="Phase1",variable=self.var,value="1").grid(column=2,row=0)
+        Radiobutton(self,command=self.btnCallback,text="Phase2",variable=self.var,value="2").grid(column=3,row=0)
+        Radiobutton(self,command=self.btnCallback,text="PSK",variable=self.var,value="m").grid(column=4,row=0)
+        
+    def btnCallback(self):
+        self.callback(self.var.get())
 
+
+def test(var,var2):
+    print(var,var2)
 
 
 fgen = FgenIO()
@@ -141,19 +153,19 @@ root.grid()
 root.columnconfigure(1,weight=1)
 
 Label(root,text="Frequency 1:").grid(column=0,row=0)
-fsel1 = FgenFselect(root,fgen.setFreq).grid(column=0,row=1,padx=5)
+fsel1 = FgenFselect(root,lambda val:fgen.setFreq(1,val)).grid(column=0,row=1,padx=5)
 
 Label(root,text="Frequency 2:").grid(column=2,row=0)
-fsel2 = FgenFselect(root,fgen.setFreq).grid(column=2,row=1,padx=5)
+fsel2 = FgenFselect(root,lambda val:fgen.setFreq(2,val)).grid(column=2,row=1,padx=5)
 
 Label(root,text="Phase 1:").grid(column=0,row=2)
-psel1 = FgenPselect(root).grid(column=0,row=3,sticky=W+E)
+psel1 = FgenPselect(root,lambda val:fgen.setPhase(1,val)).grid(column=0,row=3,sticky=W+E)
 
 Label(root,text="Phase 2:").grid(column=2,row=2)
-psel2 = FgenPselect(root).grid(column=2,row=3,sticky=W+E)
+psel2 = FgenPselect(root,lambda val:fgen.setPhase(2,val)).grid(column=2,row=3,sticky=W+E)
 
-msel = FgenMode(root,fgen.setMode).grid(column=0,columnspan=3,row=5,sticky=E+W)
-fsel = FgenFMode(root).grid(column=0,columnspan=3,row=7,sticky=E+W)
-psel = FgenPMode(root).grid(column=0,columnspan=3,row=9,sticky=E+W)
+msel = FgenMode (root,fgen.setMode    ).grid(column=0,columnspan=3,row=5,sticky=E+W)
+fsel = FgenFMode(root,fgen.setFreqOut ).grid(column=0,columnspan=3,row=7,sticky=E+W)
+psel = FgenPMode(root,fgen.setPhaseOut).grid(column=0,columnspan=3,row=9,sticky=E+W)
 
 root.mainloop()
