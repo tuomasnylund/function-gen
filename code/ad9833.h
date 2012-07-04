@@ -52,12 +52,16 @@
 #define AD_F_MCLK 25000000
 #define AD_2POW28 268435456
 #define AD_FREQ_CALC(freq) (uint32_t)(((double)AD_2POW28/(double)AD_F_MCLK*freq)*4)
+#define AD_MOD_FREQ_CALC(freq) (F_CPU/(64*freq))
 
+#define TIMER_START() ICCR1B |=   (1<<CS11)|(1<<CS10)
+#define TIMER_STOP()  ICCR1B &= ~((1<<CS11)|(1<<CS10))
 
 
 typedef struct {
     float    freq[2];
     float    phase[2];
+    float    mod_freq;
     uint8_t  freq_out;
     uint8_t  phase_out;
     uint8_t  mode;
@@ -81,5 +85,8 @@ uint8_t ad9833_get_freq_out(void);
 
 void    ad9833_set_phase_out(uint8_t phase_out);
 uint8_t ad9833_get_phase_out(void);
+
+void    ad9833_set_mod_freq(uint16_t freq);
+void    ad9833_set_mod_bytes(uint8_t num, uint8_t *bytes, uint8_t repeat);
 
 #endif

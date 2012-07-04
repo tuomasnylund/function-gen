@@ -18,11 +18,12 @@
 */
 
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include <util/delay.h>
 #include "ad9833.h"
 #include "spi.h"
 
-ad9833_settings_t ad_settings;
+ad9833_settings_t ad_settings; 
 
 static inline void ad9833_send(uint16_t packet){
     spi_send_byte((uint8_t)(packet>>8));
@@ -35,8 +36,16 @@ void ad9833_init(void){
     AD_FSYNC_DDR |= (1<<AD_FSYNC_BIT);
     AD_FSYNC_HI();
 
+    //init timer modulation
+    TCCR1B |= (1<<WGM12);  //timer in CTC mode
+    TCCR1B |= (1<<CS11)|(1<<CS10);//clockdiv 64
+    TIMSK1 |= (1<<OCIE1A);
+    OCR1A = 0xFFF0;
+
+    //some datasheet-proscribed delay here
     _delay_us(10);
 
+    //start as half-asleep
     AD_FSYNC_LO();
     _delay_us(5);
     ad9833_send((1<<AD_SLEEP12)|(1<<AD_RESET));
@@ -44,11 +53,11 @@ void ad9833_init(void){
     _delay_us(5);
     AD_FSYNC_HI();
 
+    //set some nice default values
     ad9833_set_frequency(0, 0);
     ad9833_set_frequency(1, 0);
     ad9833_set_phase(0, 0);
     ad9833_set_phase(1, 0);
-
     ad9833_set_freq_out(0);
     ad9833_set_phase_out(0);
 
@@ -181,4 +190,29 @@ void ad9833_set_frequency(uint8_t reg, double freq){
 
 double ad9833_get_frequency(uint8_t reg){
     return ad_settings.freq[reg];
+}
+
+void    ad9833_set_mod_freq(uint16_t freq){
+    ad_settings.mod_freq = freq;
+    OCR1A = AD_MOD_FREQ_CALC(freq);
+}
+void    ad9833_set_mod_bytes(uint8_t num, uint8_t *bytes, uint8_t repeat){
+    //TODO implements this thing
+}
+
+ISR(TIMER1_COMPA_vect){
+    uint16_t check = ad_settings.command_reg;
+    //TODO implement modulation of real signals
+    if (ad_settings.freq_out  == 2)
+        ad_settings.command_reg ^= ((uint16_t)1<<AD_FSELECT);
+    if (ad_settings.phase_out == 2)
+        ad_settings.command_reg ^= ((uint16_t)1<<AD_PSELECT);
+
+    if (check != ad_settings.command_reg){
+        AD_FSYNC_LO();
+        _delay_us(5);
+        ad9833_send(ad_settings.command_reg);
+        _delay_us(5);
+        AD_FSYNC_HI();
+    }
 }

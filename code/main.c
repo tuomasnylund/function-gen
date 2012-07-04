@@ -39,7 +39,7 @@
 #include "spi.h"
 #include "ad9833.h"
 
-#define STRBUFLEN 20
+#define STRBUFLEN 15
 
 /**********************************************************
  * Function prototypes
@@ -138,7 +138,7 @@ int main(void){
                 case 'p': //< phase related
                     switch (sBuffer[2]){
                         case '1':
-                            ad9833_set_phase(0, atoi(&(sBuffer[4])));
+                            ad9833_set_phase(0, atof(&(sBuffer[4])));
                             break;
                         case '2':
                             ad9833_set_phase(1, atof(&(sBuffer[4])));
@@ -174,6 +174,8 @@ int main(void){
                             break;
                     }
                     break;
+                case 'm': //<set modulation freq
+                    ad9833_set_mod_freq(atof(&(sBuffer[3])));
             }
         }
         else if (sBuffer[0] == 'g'){
