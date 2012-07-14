@@ -109,7 +109,7 @@ void ad9833_set_phase(uint8_t reg, double phase){
 
     AD_FSYNC_LO();
     _delay_us(5);
-    ad9833_send(reg_reg | (uint16_t)phase);
+    ad9833_send(reg_reg | AD_PHASE_CALC(ad_settings.phase[reg]));
     _delay_us(5);
     AD_FSYNC_HI();
 }

@@ -54,6 +54,8 @@
 #define AD_FREQ_CALC(freq) (uint32_t)(((double)AD_2POW28/(double)AD_F_MCLK*freq)*4)
 #define AD_MOD_FREQ_CALC(freq) (F_CPU/(64*(uint32_t)freq))
 
+#define AD_PHASE_CALC(phase_deg) (uint16_t)((512*phase_deg)/45)
+
 #define TIMER_START() ICCR1B |=   (1<<CS11)|(1<<CS10)
 #define TIMER_STOP()  ICCR1B &= ~((1<<CS11)|(1<<CS10))
 
