@@ -16,6 +16,11 @@
 * You should have received a copy of the GNU General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+
+/** \file spi.c
+ * Simple code for using the AVR SPI peripharal, uses polling
+ */
+
 #include "spi.h"
 
 

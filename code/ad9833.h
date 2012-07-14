@@ -17,6 +17,12 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * \file ad9833.h
+ *
+ * Header file for ad0833.c
+ */
+
 #ifndef _AD9833_H_
 #define _AD9833_H_
 
@@ -43,7 +49,7 @@
 #define AD_DIV2    3
 #define AD_MODE    1
 
-/**to send a freq or phase to correct register, OR the packet with one of these */
+/*to send a freq or phase to correct register, OR the packet with one of these */
 #define AD_FREQ0  (1<<14)
 #define AD_FREQ1  (1<<15)
 #define AD_PHASE0 (3<<14)
@@ -59,7 +65,8 @@
 #define TIMER_START() ICCR1B |=   (1<<CS11)|(1<<CS10)
 #define TIMER_STOP()  ICCR1B &= ~((1<<CS11)|(1<<CS10))
 
-
+/** Struct that holds all the configuration it's initialized as a global variable
+ * in the ad9833.c file */
 typedef struct {
     float    freq[2];
     float    phase[2];

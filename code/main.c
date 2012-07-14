@@ -17,6 +17,11 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+/** \file main.c
+ * The main file for Function Generator
+ * Handles the reading and parsing of commands from USB serial
+ */
+
 //standard libs
 #include <stdlib.h>
 #include <string.h>

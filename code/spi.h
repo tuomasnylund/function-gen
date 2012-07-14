@@ -17,6 +17,10 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+/** \file spi.h
+ * Header file for spi.c
+ */
+
 #ifndef SPI_H_
 #define SPI_H_
 

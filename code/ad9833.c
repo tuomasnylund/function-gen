@@ -17,13 +17,21 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * \file ad9833.c
+ *
+ * Functions for controlling a AD9833 DDS chip
+ * It allows generating sine, square and triangle waves,
+ * also FSK and PSK
+ */
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include "ad9833.h"
 #include "spi.h"
 
-ad9833_settings_t ad_settings; 
+ad9833_settings_t ad_settings; ///<This is used to store all settings
 
 static inline void ad9833_send(uint16_t packet){
     spi_send_byte((uint8_t)(packet>>8));
