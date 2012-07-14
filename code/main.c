@@ -104,7 +104,7 @@ int main(void){
 
     //variables
     //uint8_t i;
-    char sBuffer[STRBUFLEN]; //!< character buffer for usb serial
+    char sBuffer[STRBUFLEN]; // character buffer for usb serial
 
     //initialize
     initialize();
@@ -115,9 +115,9 @@ int main(void){
         /** Get input */
         fgets(sBuffer,STRBUFLEN,&USBSerialStream);
 
-        if (sBuffer[0] == 's'){ //< Command is a set command
+        if (sBuffer[0] == 's'){ // Command is a set command
             switch (sBuffer[1]){
-                case 'f':       //< frequency related
+                case 'f':       // frequency related
                     switch (sBuffer[2]){
                         case '1':
                             ad9833_set_frequency(0, atof(&(sBuffer[4])));
@@ -140,7 +140,7 @@ int main(void){
                             break;
                     }
                     break;
-                case 'p': //< phase related
+                case 'p': // phase related
                     switch (sBuffer[2]){
                         case '1':
                             ad9833_set_phase(0, atof(&(sBuffer[4])));
@@ -163,7 +163,7 @@ int main(void){
                             break;
                     }
                     break;
-                case 'o': //<set output mode
+                case 'o': //set output mode
                     switch (sBuffer[3]){
                         case 'o':
                             ad9833_set_mode(AD_OFF);
@@ -179,14 +179,14 @@ int main(void){
                             break;
                     }
                     break;
-                case 'm': //<set modulation freq
+                case 'm': //set modulation freq
                     ad9833_set_mod_freq(atoi(&(sBuffer[3])));
             }
         }
         else if (sBuffer[0] == 'g'){
         }
         
-        /**LUFA usb related tasks*/
+        /*LUFA usb related tasks*/
         CDC_Device_USBTask(&VirtualSerial_CDC_Interface);
         USB_USBTask();
 
@@ -218,13 +218,13 @@ void initialize(void){
     /* Init AD9833 */
     ad9833_init();
 
-    /** LUFA USB related inits */
+    /* LUFA USB related inits */
 	USB_Init();
 	CDC_Device_CreateBlockingStream
         (&VirtualSerial_CDC_Interface, &USBSerialStream);
 
 
-    /** enable interrupts*/
+    /* enable interrupts*/
     sei();
 }
 
