@@ -52,7 +52,7 @@
 #define AD_F_MCLK 25000000
 #define AD_2POW28 268435456
 #define AD_FREQ_CALC(freq) (uint32_t)(((double)AD_2POW28/(double)AD_F_MCLK*freq)*4)
-#define AD_MOD_FREQ_CALC(freq) (F_CPU/(64*freq))
+#define AD_MOD_FREQ_CALC(freq) (F_CPU/(64*(uint32_t)freq))
 
 #define TIMER_START() ICCR1B |=   (1<<CS11)|(1<<CS10)
 #define TIMER_STOP()  ICCR1B &= ~((1<<CS11)|(1<<CS10))
