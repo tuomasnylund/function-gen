@@ -24,25 +24,62 @@
 #ifndef SPI_H_
 #define SPI_H_
 
+/** \defgroup spi_h spi.h - AVR SPI library
+ * This is a very simple SPI library that uses the internal SPI peripheral of the AVR.
+ *
+ * It does not rely on interrupts, instead it uses polling.
+ *
+ * Any chip select lines or similiar things you have to implement yourself.
+ *
+ *
+ * \section example Example
+ * \code
+ *      //initialize the SPI
+ *      spi_init(SPIMODE0|MSB_FIRST|CLOCKDIV4);
+ *      
+ *      //Send a byte
+ *      spi_send_byte(0xAA);
+ *
+ *      //Receive byte
+ *      uint8_t rcv;
+ *      rcv = spi_read_byte();
+ * \endcode
+ *
+ * @{ */
+
 #include <avr/io.h>
 
+/** \name SPI pin definitions
+ * @{ */
 #define SPI_DDR      DDRB
 #define SPI_MOSI_BIT PB2
 #define SPI_SCK_BIT  PB1
 #define SPI_CS_BIT   PB0
+/** @} */
 
-//init parameters
+/** \name SPI mode masks
+ * use with \ref spi_init()
+ * @{ */
 #define SPIMODE0   (0<<CPHA)
 #define SPIMODE1   (1<<CPHA)
 #define SPIMODE2   (2<<CPHA)
 #define SPIMODE3   (3<<CPHA)
+/** @} */
 
+/** \name SPI bit order masks
+ * use with \ref spi_init()
+ * @{ */
 #define LSB_FIRST  (1<<DORD)
 #define MSB_FIRST  (0<<DORD)
+/** @} */
 
+/** \name SPI clock speed masks
+ * use with \ref spi_init()
+ * @{ */
 #define CLOCKDIV4  (0<<SPR0)
 #define CLOCKDIV16 (1<<SPR0)
 #define CLOCKDIV64 (2<<SPR0)
+/** @} */
 
 void spi_init(uint8_t setup);
 
@@ -51,3 +88,5 @@ void spi_send_byte(uint8_t data);
 uint8_t spi_read_byte(void);
 
 #endif
+
+/** @} */

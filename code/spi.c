@@ -24,17 +24,29 @@
 #include "spi.h"
 
 
+/**
+ * Initializes the AVR SPI peripheral according to the given parameters. 
+ * \param setup SPI options, has to be combined mask of one of SPIMODE*, *_FIRST, CLOCKDIV* each
+ */
 void spi_init(uint8_t setup){
     SPI_DDR |= (1<<SPI_MOSI_BIT)|(1<<SPI_SCK_BIT)|(1<<SPI_CS_BIT);
 
     SPCR     = (1<<SPE)|(1<<MSTR)|setup;
 }
 
+/**
+ * Sends one byte over SPI, uses polling. 
+ * \param data byte to be sent
+ */
 void spi_send_byte(uint8_t data){
     SPDR = data;
     while(!(SPSR & (1<<SPIF)));
 }
 
+/**
+ * Receives one byte over SPI, uses polling. 
+ * \return received byte
+ */
 uint8_t spi_read_byte(void){
     SPDR = 0x00;
     while(!(SPSR & (1<<SPIF)));
