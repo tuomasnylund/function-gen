@@ -20,9 +20,12 @@
 /**
  * \file ad9833.c
  *
- * Functions for controlling a AD9833 DDS chip
- * It allows generating sine, square and triangle waves,
- * also FSK and PSK
+ * Functions for controlling a AD9833 DDS chip with an AVR microcontroller
+ * The chip allows generating sine, square and triangle waves at frequencies
+ * ranging from ~0.1Hz to ~3MHz.
+ *
+ * It can also do some simple binary modulation in the form of FSK and PSK.
+ * Amplitude modulation should be possible aswell, but isn't implemented yet.
  */
 
 #include <avr/io.h>
@@ -31,13 +34,21 @@
 #include "ad9833.h"
 #include "spi.h"
 
-ad9833_settings_t ad_settings; ///<This is used to store all settings
+ad9833_settings_t ad_settings; ///<This is used to store all settings.
 
+/**
+ * a wrapper function for sending 16-bit SPI packets.
+ * \param packet 16-bit value to be sent over SPI.
+ */
 static inline void ad9833_send(uint16_t packet){
     spi_send_byte((uint8_t)(packet>>8));
     spi_send_byte((uint8_t)packet);
 }
 
+/**
+ * Initializes the AD9833 and the relevant variables.
+ * Also initializes the Timer1 peripheral that is used for modulation timing.
+ */
 void ad9833_init(void){
     //init FSYNC pin (aka Chip select)
     ad_settings.command_reg |= (1<<AD_B28);
@@ -71,6 +82,14 @@ void ad9833_init(void){
 
 }
 
+/** 
+ * Sets the ad9833 output waveform to the one given as a parameter.
+ * \param mode possible values:
+ *      - AD_OFF
+ *      - AD_TRIANGLE
+ *      - AD_SQUARE
+ *      - AD_SINE
+ */
 void ad9833_set_mode(uint8_t mode){
     ad_settings.mode = mode;
     switch (mode){
@@ -106,6 +125,13 @@ void ad9833_set_mode(uint8_t mode){
     AD_FSYNC_HI();
 }
 
+/**
+ * sets the desired ad9833 internal phase register to a value that
+ * produces the desired phase.
+ *
+ * \param reg the desired phase register to be manipulated, either 0 or 1
+ * \param phase the desired phase
+ */
 void ad9833_set_phase(uint8_t reg, double phase){
     uint16_t reg_reg; //probably should be renamed...
     if (reg==1)
@@ -122,10 +148,23 @@ void ad9833_set_phase(uint8_t reg, double phase){
     AD_FSYNC_HI();
 }
 
+/**
+ * returns the phase of the selected register
+ * \param reg the register of which value we want to get
+ * \return the phase of the selected register
+ */
 double ad9833_get_phase(uint8_t reg){
     return ad_settings.phase[reg];
 }
 
+/**
+ * Selects which frequency register is used to generate the output.
+ * Also used to select FSK.
+ * \param phase_out possible values:
+ *      - 0 = use phase register 0
+ *      - 1 = use phase register 1
+ *      - 2 = PSK
+ */
 void    ad9833_set_freq_out(uint8_t freq_out){
     ad_settings.freq_out = freq_out;
     switch (freq_out){
@@ -147,10 +186,22 @@ void    ad9833_set_freq_out(uint8_t freq_out){
     AD_FSYNC_HI();
 }
 
+/**
+ * returns the previously set frequency output mode.
+ * \return the previously set frequency out mode
+ */
 uint8_t ad9833_get_freq_out(void){
     return ad_settings.freq_out;
 }
 
+/**
+ * Selects which phase register is used to generate the output
+ * Also used to select PSK
+ * \param phase_out possible values:
+ *  - 0 = use phase register 0
+ *  - 1 = use phase register 1
+ *  - 2 = PSK
+ */
 void    ad9833_set_phase_out(uint8_t phase_out){
     ad_settings.phase_out = phase_out;
     switch (phase_out){
@@ -172,10 +223,21 @@ void    ad9833_set_phase_out(uint8_t phase_out){
     AD_FSYNC_HI();
 }
 
+/**
+ * returns the previously set phase output mode.
+ * \return the previously set phase out mode
+ */
 uint8_t ad9833_get_phase_out(void){
     return ad_settings.phase_out;
 }
 
+/**
+ * sets the desired ad9833 internal frequency register to a value that
+ * produces the desired frequency.
+ *
+ * \param reg the desired frequency register to be manipulated, either 0 or 1
+ * \param freq the desired frequency
+ */
 void ad9833_set_frequency(uint8_t reg, double freq){
     uint32_t freq_reg;
     uint16_t reg_reg; //probably should be renamed...
@@ -196,18 +258,41 @@ void ad9833_set_frequency(uint8_t reg, double freq){
     AD_FSYNC_HI();
 }
 
+/**
+ * returns the frequency of the selected register
+ * \param reg the register of which value we want to get
+ * \return the frequency of the selected register
+ */
 double ad9833_get_frequency(uint8_t reg){
     return ad_settings.freq[reg];
 }
 
+/**
+ * sets the modulation frequenct to the desired value
+ *
+ * \param freq the desired modulation frequency
+ */
 void    ad9833_set_mod_freq(uint16_t freq){
     ad_settings.mod_freq = freq;
     OCR1A = AD_MOD_FREQ_CALC(freq);
 }
+
+
+/**
+ * Sets the bytes to be modulated
+ * NOT IMPLEMENTED YET
+ *
+ * \param num number of bytes to be sent
+ * \param bytes pointer to an array of bytes to be sent
+ * \param repeat should the sending be repeated
+ */
 void    ad9833_set_mod_bytes(uint8_t num, uint8_t *bytes, uint8_t repeat){
     //TODO implements this thing
 }
 
+/**
+ * Timer interrupt for handling modulation
+ */
 ISR(TIMER1_COMPA_vect){
     uint16_t check = ad_settings.command_reg;
     //TODO implement modulation of real signals
