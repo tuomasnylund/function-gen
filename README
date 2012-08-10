@@ -21,7 +21,7 @@ board at a later date.
 
 
 TODO:
-* AVR: Simple FSK and PSK
+* AVR: Complex FSK and PSK
 * AVR: Implement commands to get current settings of the function generator
 * PC:  Implement fetching current settings on startup of pc interface
 
