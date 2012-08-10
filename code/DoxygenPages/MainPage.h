@@ -24,4 +24,6 @@
 *  - \ref ad9833_h
 *  - \ref main_c
 *
+* \section license License
+* All code is released under GPLv3
 */
