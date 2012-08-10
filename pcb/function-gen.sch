@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date Thu 21 Jun 2012 01:48:41 AM EEST
+EESchema Schematic File Version 2  date Fri Aug 10 18:49:11 2012
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -33,11 +33,11 @@ LIBS:my_parts
 LIBS:function-gen-cache
 EELAYER 25  0
 EELAYER END
-$Descr A4 11700 8267
+$Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title ""
-Date "20 jun 2012"
+Date "10 aug 2012"
 Rev ""
 Comp ""
 Comment1 ""
@@ -60,11 +60,11 @@ Wire Wire Line
 Wire Wire Line
 	8400 5350 8000 5350
 Wire Wire Line
-	9300 3700 9400 3700
+	9450 4050 9550 4050
 Wire Wire Line
-	9800 3700 9950 3700
+	9950 4050 10100 4050
 Wire Wire Line
-	9950 3700 9950 4150
+	10100 4050 10100 4500
 Wire Wire Line
 	4350 6900 4350 6850
 Wire Wire Line
@@ -332,10 +332,10 @@ Wire Wire Line
 Wire Wire Line
 	4350 6300 4350 6350
 Wire Wire Line
-	9800 4050 9950 4050
-Connection ~ 9950 4050
+	9950 4400 10100 4400
+Connection ~ 10100 4400
 Wire Wire Line
-	9300 4050 9400 4050
+	9450 4400 9550 4400
 Wire Wire Line
 	8000 5450 8450 5450
 Wire Wire Line
@@ -346,53 +346,53 @@ Text Label 8000 6250 0    60   ~ 0
 LED2
 Text Label 8000 6150 0    60   ~ 0
 LED1
-Text Label 8800 4050 2    60   ~ 0
+Text Label 8950 4400 2    60   ~ 0
 LED2
-Text Label 8800 3700 2    60   ~ 0
+Text Label 8950 4050 2    60   ~ 0
 LED1
 $Comp
 L R R11
 U 1 1 4FD99A9B
-P 9050 4050
-F 0 "R11" V 9130 4050 50  0000 C CNN
-F 1 "1k" V 9050 4050 50  0000 C CNN
-	1    9050 4050
+P 9200 4400
+F 0 "R11" V 9280 4400 50  0000 C CNN
+F 1 "1k" V 9200 4400 50  0000 C CNN
+	1    9200 4400
 	0    -1   -1   0   
 $EndComp
 $Comp
 L R R9
 U 1 1 4FD99A98
-P 9050 3700
-F 0 "R9" V 9130 3700 50  0000 C CNN
-F 1 "1k" V 9050 3700 50  0000 C CNN
-	1    9050 3700
+P 9200 4050
+F 0 "R9" V 9280 4050 50  0000 C CNN
+F 1 "1k" V 9200 4050 50  0000 C CNN
+	1    9200 4050
 	0    -1   -1   0   
 $EndComp
 $Comp
 L GND #PWR01
 U 1 1 4FD99A94
-P 9950 4150
-F 0 "#PWR01" H 9950 4150 30  0001 C CNN
-F 1 "GND" H 9950 4080 30  0001 C CNN
-	1    9950 4150
+P 10100 4500
+F 0 "#PWR01" H 10100 4500 30  0001 C CNN
+F 1 "GND" H 10100 4430 30  0001 C CNN
+	1    10100 4500
 	1    0    0    -1  
 $EndComp
 $Comp
 L LED D4
 U 1 1 4FD99A87
-P 9600 4050
-F 0 "D4" H 9600 4150 50  0000 C CNN
-F 1 "LED" H 9600 3950 50  0000 C CNN
-	1    9600 4050
+P 9750 4400
+F 0 "D4" H 9750 4500 50  0000 C CNN
+F 1 "LED" H 9750 4300 50  0000 C CNN
+	1    9750 4400
 	1    0    0    -1  
 $EndComp
 $Comp
 L LED D3
 U 1 1 4FD99A85
-P 9600 3700
-F 0 "D3" H 9600 3800 50  0000 C CNN
-F 1 "LED" H 9600 3600 50  0000 C CNN
-	1    9600 3700
+P 9750 4050
+F 0 "D3" H 9750 4150 50  0000 C CNN
+F 1 "LED" H 9750 3950 50  0000 C CNN
+	1    9750 4050
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -460,10 +460,6 @@ F 1 "OSC_SMT" H 3300 6700 60  0000 C CNN
 	1    3250 6400
 	1    0    0    -1  
 $EndComp
-Entry Wire Line
-	5250 4950 5350 5050
-Text Label 5650 5550 2    60   ~ 0
-V_BUS
 Text Label 8950 5100 2    60   ~ 0
 SPI_MISO
 Text Label 8950 5200 2    60   ~ 0
@@ -1127,7 +1123,7 @@ L R R4
 U 1 1 4FD3D2DF
 P 4600 1850
 F 0 "R4" V 4680 1850 50  0000 C CNN
-F 1 "R" V 4600 1850 50  0000 C CNN
+F 1 "10k" V 4600 1850 50  0000 C CNN
 	1    4600 1850
 	1    0    0    -1  
 $EndComp
@@ -1238,4 +1234,15 @@ F 1 "AD9833" H 5750 2500 60  0000 C CNN
 	1    5750 2350
 	1    0    0    -1  
 $EndComp
+$Comp
+L +5V #PWR040
+U 1 1 50253018
+P 5650 5400
+F 0 "#PWR040" H 5650 5490 20  0001 C CNN
+F 1 "+5V" H 5650 5490 30  0000 C CNN
+	1    5650 5400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5650 5400 5650 5550
 $EndSCHEMATC
