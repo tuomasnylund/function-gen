@@ -22,6 +22,12 @@
  * Handles the reading and parsing of commands from USB serial
  */
 
+/** \defgroup main_c main.c - the main file
+ * The main file initializes the LUFA USB library as Virtual serial port
+ * and the AD9833 DDS chip. After that, it parses input fron the virtual
+ * serial port and configures the DDS chip accordingly.
+ * @{ */
+
 //standard libs
 #include <stdlib.h>
 #include <string.h>
@@ -44,7 +50,7 @@
 #include "spi.h"
 #include "ad9833.h"
 
-#define STRBUFLEN 15
+#define STRBUFLEN 15 ///<The lenght of buffer for USB serial
 
 /**********************************************************
  * Function prototypes
@@ -244,3 +250,5 @@ void EVENT_USB_Device_ConfigurationChanged(void){
 void EVENT_USB_Device_ControlRequest(void){
 	CDC_Device_ProcessControlRequest(&VirtualSerial_CDC_Interface);
 }
+
+/** @} */

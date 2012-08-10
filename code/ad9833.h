@@ -25,6 +25,24 @@
 
 
 /**\defgroup ad9833_h ad9833.h - AD9833 AVR library
+ * This is the libary for handling the AD9833 DDS chip. The libary requires the \ref spi_h library
+ *
+ * \section ad9833_example Example
+ * \code
+ *      //Init AD9833 
+ *      ad9833_init();
+ *
+ *      //Set frequency 0 to 10kHz
+ *      ad9833_set_frequency(0,10000);
+ *
+ *      //Select frequency 0 as output
+ *      ad9833_set_freq_out(0);
+ *
+ *      //Set output mode to Sine
+ *      ad9833_set_mode(AD_SINE);
+ * \endcode
+ *
+ *
  * \ingroup ad9833
  * @{
  */
